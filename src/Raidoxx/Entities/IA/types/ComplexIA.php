@@ -19,7 +19,6 @@ use Raidoxx\Entities\monsters\Enderman;
 use Raidoxx\Entities\monsters\Skeleton;
 use Raidoxx\Entities\RDXBaseMob;
 use Raidoxx\Entities\Temperament;
-use Raidoxx\HurtScreamerSound;
 use Raidoxx\Libs\pathfinder\type\AsyncPathfinder;
 
 class ComplexIA extends BaseIA
