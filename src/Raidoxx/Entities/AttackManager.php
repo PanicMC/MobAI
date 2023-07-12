@@ -99,24 +99,6 @@ class AttackManager
         }
     }
 
-    /*
-     * public boolean targetOption(EntityCreature creature, double distance) {
-        boolean hasTarget = super.targetOption(creature, distance);
-        if (hasTarget) {
-            if (!this.angryFlagSet && creature != null) {
-                this.setDataProperty(new LongEntityData(DATA_TARGET_EID, creature.getId()));
-                this.angryFlagSet = true;
-            }
-        } else {
-            if (this.angryFlagSet) {
-                this.setDataProperty(new LongEntityData(DATA_TARGET_EID, 0));
-                this.angryFlagSet = false;
-                this.stayTime = 100;
-            }
-        }
-        return hasTarget;
-    }
-     */
     private function shoot(): void
     {
         if($this->getMob() instanceof Skeleton){

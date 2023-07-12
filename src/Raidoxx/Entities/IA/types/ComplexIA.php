@@ -36,11 +36,6 @@ class ComplexIA extends BaseIA
         parent::__construct($entity);
     }
 
-    public function init(): void
-    {
-
-    }
-
     public function update(): bool
     {
         if($this->entity instanceof RDXBaseMob){

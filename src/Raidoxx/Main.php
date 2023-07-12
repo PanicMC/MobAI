@@ -42,6 +42,11 @@ final class Main extends PluginBase implements Listener
         return self::$instance;
     }
 
+    //TODO: Fazer sistema de spawn de mobs por bioma usando a lib AwaitGenerator
+
+    /*
+     * Teste dos mobs
+     */
     public function onUse(PlayerJoinEvent $event): void
     {
         $p = $event->getPlayer();

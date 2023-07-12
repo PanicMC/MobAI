@@ -1,6 +1,6 @@
 <?php
 
-namespace Raidoxx;
+namespace Raidoxx\Entities\inventory;
 
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\item\Item;
@@ -10,8 +10,8 @@ class RDXMobInventory extends SimpleInventory
 {
 
     public function __construct(
-        private RDXBaseMob $holder,
-        int $size = 1
+        private readonly RDXBaseMob $holder,
+        int                         $size = 1
     ){
         parent::__construct($size);
     }

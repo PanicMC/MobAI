@@ -13,9 +13,8 @@ use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\network\mcpe\protocol\types\inventory\ContainerIds;
 use pocketmine\network\mcpe\protocol\types\inventory\ItemStackWrapper;
 use Raidoxx\Entities\IA\BaseIA;
+use Raidoxx\Entities\inventory\RDXMobInventory;
 use Raidoxx\Libs\pathfinder\setting\Settings;
-use Raidoxx\Libs\pathfinder\type\AsyncPathfinder;
-use Raidoxx\RDXMobInventory;
 
 class RDXBaseMob extends Living
 {
