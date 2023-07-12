@@ -6,6 +6,8 @@ use pocketmine\entity\EntitySizeInfo;
 use pocketmine\entity\Living;
 use pocketmine\entity\Location;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\inventory\ArmorInventory;
+use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\convert\TypeConverter;
@@ -136,6 +138,25 @@ class RDXBaseMob extends Living
         return $this->ia;
     }
 
+    public function setArmor(Armor $armor): void
+    {
+        $inventory = $this->getArmorInventory();
+
+        switch ($armor->getArmorSlot()) {
+            case ArmorInventory::SLOT_HEAD:
+                $inventory->setHelmet($armor);
+                break;
+            case ArmorInventory::SLOT_CHEST:
+                $inventory->setChestplate($armor);
+                break;
+            case ArmorInventory::SLOT_LEGS:
+                $inventory->setLeggings($armor);
+                break;
+            case ArmorInventory::SLOT_FEET:
+                $inventory->setBoots($armor);
+                break;
+        }
+    }
 
     public function addItemInHand(Item $item): void
     {

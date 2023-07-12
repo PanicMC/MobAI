@@ -56,7 +56,7 @@ class Enderman extends RDXBaseMob
     {
         if($source instanceof EntityDamageByEntityEvent){
             $damager = $source->getDamager();
-            $this->getAtributes()->setSpeed(14);
+            $this->getAtributes()->setSpeed(18);
             $this->getNetworkProperties()->setGenericFlag(EntityMetadataFlags::ANGRY, true);
             $this->teleport($this->getRandomPositionByEntity($this));
             $this->getWorld()->addParticle($this->getPosition(), new EndermanTeleportParticle());

@@ -2,6 +2,10 @@
 
 namespace Raidoxx;
 
+use Closure;
+use Exception;
+use Generator;
+use pocketmine\entity\Entity;
 use pocketmine\entity\Location;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -9,14 +13,18 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\item\VanillaItems;
 use pocketmine\plugin\PluginBase;
+use pocketmine\Server;
 use pocketmine\world\particle\HeartParticle;
+use pocketmine\world\Position;
 use Raidoxx\Entities\IA\Utils\CheckBlocks;
 use Raidoxx\Entities\IA\Utils\RandomPositions;
 use Raidoxx\Entities\monsters\Creeper;
 use Raidoxx\Entities\monsters\Enderman;
 use Raidoxx\Entities\monsters\Skeleton;
 use Raidoxx\Entities\monsters\Zombie;
+use Raidoxx\Libs\AwaitGenerator\Await;
 use Raidoxx\Loader\MobsLoader;
+use Throwable;
 
 final class Main extends PluginBase implements Listener
 {
@@ -24,6 +32,7 @@ final class Main extends PluginBase implements Listener
     use RandomPositions;
     use CheckBlocks;
 
+    public array $mobs = [];
     private static Main $instance;
 
     public function onLoad(): void
@@ -47,21 +56,23 @@ final class Main extends PluginBase implements Listener
     /*
      * Teste dos mobs
      */
-    public function onUse(PlayerJoinEvent $event): void
+    public function onJoin(PlayerJoinEvent $event): void
     {
         $p = $event->getPlayer();
 
-        $entity = new Skeleton(Location::fromObject($p->getPosition(), $p->getWorld()));
-        $entity->spawnToAll();
-        $entity2 = new Zombie(Location::fromObject($p->getPosition(), $p->getWorld()));
-        $entity2->spawnToAll();
-        $entity3 = new Creeper(Location::fromObject($p->getPosition(), $p->getWorld()));
-        $entity3->spawnToAll();
-        $entity4 = new Enderman(Location::fromObject($p->getPosition(), $p->getWorld()));
-        $entity4->spawnToAll();
+        $entities = [
+            "Zombie" => Zombie::class,
+            "Skeleton" => Skeleton::class,
+            "Creeper" => Creeper::class,
+            "Enderman" => Enderman::class,
+        ];
+
+        $this->spawnEntities($p->getPosition(), $entities);
     }
 
-    public function onU(PlayerInteractEvent $event){
+
+    public function onUse(PlayerInteractEvent $event): void
+    {
         $p = $event->getPlayer();
 
         if($event->getItem()->getTypeId() == VanillaItems::STICK()->getTypeId()){
@@ -71,20 +82,29 @@ final class Main extends PluginBase implements Listener
                 "Creeper" => Creeper::class,
                 "Enderman" => Enderman::class,
             ];
-
-            array_walk($entities, function ($entity) use ($p) {
-                $random = $this->getRandomPosition($p->getPosition(), 10);
-                $entity = new $entity(Location::fromObject($random, $random->getWorld()));
-                $entity->spawnToAll();
-            });
+            $this->spawnEntities($p->getPosition(), $entities);
         }
     }
 
-    public function onMove(PlayerMoveEvent $event): void
+    //Teste de spawn de mobs usando a lib AwaitGenerator
+    function spawnEntities(Position $position, array $entities): void
     {
-        $p = $event->getPlayer();
-        $b = $this->lookAtBlock($p->getLocation()->getYaw(), $p->getPosition(), $p->getWorld());
-        $p->sendPopup($b->getName());
-        $p->getWorld()->addParticle($b->getPosition(), new HeartParticle());
+        Await::f2c(fn() => $this->spawnEntity($position, $entities), function (Throwable $e) {
+            $this->getLogger()->error($e->getMessage());
+        }, function () {
+            $this->getLogger()->info("Spawned!");
+        });
     }
+
+    function spawnEntity(Position $position, array $entities): Generator
+    {
+        foreach ($entities as $entity) {
+            $entity = new $entity(Location::fromObject($this->getRandomPosition($position, 10), $position->getWorld()));
+            yield;
+            $entity->spawnToAll();
+            yield;
+        }
+    }
+    //Fim do teste de spawn de mobs usando a lib AwaitGenerator
+
 }
