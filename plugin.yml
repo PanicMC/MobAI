@@ -1,0 +1,4 @@
+name: RDXMobs
+version: 0.0.1
+main: Raidoxx\Main
+api: [5.0.0]
