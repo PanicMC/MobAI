@@ -36,6 +36,12 @@ class ComplexIA extends BaseIA
         parent::__construct($entity);
     }
 
+
+    public function init(): void
+    {
+        // TODO: Implement init() method.
+    }
+
     public function update(): bool
     {
         if($this->entity instanceof RDXBaseMob){
@@ -100,7 +106,6 @@ class ComplexIA extends BaseIA
                     $this->entity->getEnemyManager()->setVictim($enemy);
                     $this->entity->getTemperamentManage()->setTemperament(Temperament::AGGRESSIVE);
                     $this->entity->setNameTagAlwaysVisible();
-
                 }
             }
         }
@@ -123,4 +128,5 @@ class ComplexIA extends BaseIA
             $this->entity->getCombatManager()->update();
         }
     }
+
 }
